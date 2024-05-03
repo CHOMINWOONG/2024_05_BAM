@@ -33,7 +33,20 @@ public class Main {
 			}
 			
 			if (cmd.equals("article list")) {
-				System.out.println("게시글이 없습니다");
+				
+				if (articles.size() == 0) {
+					System.out.println("존재하는 게시글이 없습니다.");
+					
+					continue;
+				} 
+				
+				if (articles.size() != 0) {
+					System.out.println("번호  |  제목");
+					for (int i = 0; i < articles.size(); i++) {
+						Article article = articles.get(i);
+						System.out.printf("%d  |  %s\n", article.id, article.title, article.text);
+					}
+				}
 				
 			} else if (cmd.equals("article write")) {
 				System.out.printf("제목 : ");
@@ -41,12 +54,8 @@ public class Main {
 				System.out.printf("내용 : ");
 				String text = sc.nextLine();
 				
-				Article article = new Article();
-				article.id = id;
-				article.title = title;
-				article.text = text;
 				
-				articles.add(article);
+				articles.add(new Article(id, title, text));
 				
 				System.out.println(id + "번 게시물이 생성되었습니다.");
 				id++;
@@ -68,5 +77,13 @@ class Article {
 	int id;
 	String title;
 	String text;
+
+//	생성자를 만들어줘서 Main 클래스 안 지역변수에 코드를 최적화 시킬 수 있다.
+	Article(int id, String title, String text) {
+		this.id = id;
+		this.title = title;
+		this.text = text;
+				
+	}
 	
 }
