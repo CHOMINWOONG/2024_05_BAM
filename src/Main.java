@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 	
@@ -6,7 +8,10 @@ public class Main {
 		System.out.println("== 프로그램 시작 ==");
 //		데이터타입을 받을 함수 Scanner
 		Scanner sc = new Scanner(System.in);
-		int i = 1;
+		
+		List<Article> articles = new ArrayList<>();
+		int id = 1;
+		
 		while(true) {
 			
 			
@@ -36,8 +41,15 @@ public class Main {
 				System.out.printf("내용 : ");
 				String text = sc.nextLine();
 				
-				System.out.println(i + "번 게시물이 생성되었습니다.");
-				i++;
+				Article article = new Article();
+				article.id = id;
+				article.title = title;
+				article.text = text;
+				
+				articles.add(article);
+				
+				System.out.println(id + "번 게시물이 생성되었습니다.");
+				id++;
 				continue;
 				
 			} else {
@@ -50,4 +62,11 @@ public class Main {
 		sc.close();
 		System.out.println("== 프로그램 끝 ==");
 	}
+}
+
+class Article {
+	int id;
+	String title;
+	String text;
+	
 }
