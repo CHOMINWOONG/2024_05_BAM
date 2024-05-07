@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		
 		List<Article> articles = new ArrayList<>();
-		int id = 1;
+		int lastArticleId = 1;
 		
 		while(true) {
 			
@@ -50,33 +51,60 @@ public class Main {
 				
 			} else if (cmd.equals("article write")) {
 				System.out.printf("제목 : ");
-				String title = sc.nextLine();
+				String title = sc.nextLine().trim();
 				System.out.printf("내용 : ");
-				String text = sc.nextLine();
+				String text = sc.nextLine().trim();				
 				
+				articles.add(new Article(lastArticleId, title, text));
 				
-				articles.add(new Article(id, title, text));
-				
-				System.out.println(id + "번 게시물이 생성되었습니다.");
-				id++;
+				System.out.println(lastArticleId + "번 게시물이 생성되었습니다.");
+				lastArticleId++;
 				continue;
 				
-			} else {
-				System.out.println("존재하지 않는 명령어 입니다");
+			} else if (cmd.startsWith("article detail ")) {
+			
+				String[] cmdBits = cmd.split(" ");
+				
+				int id = Integer.parseInt(cmdBits[2]);
+				
+				Article foundArticle = null;
+				
+				for (Article article : articles) {
+					if (article.id == id) {
+						foundArticle = article;
+						break;
+					} 
+				}
+					if (foundArticle == null) {
+						System.out.println(id + "번 게시물이 존재하지 않습니다.");
+						continue;
+					}
+					
+					System.out.println("번호 : " + foundArticle.id);
+					System.out.println("날짜 : ~~~");
+					System.out.println("제목 : " + foundArticle.title);
+					System.out.println("내용 : " + foundArticle.text);
+					
+				
+			
+			} 
+			else {
+					System.out.println("존재하지 않는 명령어 입니다");
+				}
+				
+				
 			}
 			
-			
+			sc.close();
+			System.out.println("== 프로그램 끝 ==");
 		}
-		
-		sc.close();
-		System.out.println("== 프로그램 끝 ==");
 	}
-}
 
 class Article {
 	int id;
 	String title;
 	String text;
+	
 
 //	생성자를 만들어줘서 Main 클래스 안 지역변수에 코드를 최적화 시킬 수 있다.
 	Article(int id, String title, String text) {
@@ -87,3 +115,4 @@ class Article {
 	}
 	
 }
+
