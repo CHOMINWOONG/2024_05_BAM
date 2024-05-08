@@ -1,17 +1,25 @@
 import java.util.Scanner;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Main {
 	
+	static List<Article> articles = new ArrayList<>();
+
+	static int lastArticleId = 1;
+
 	public static void main(String[] args) {
 		System.out.println("== 프로그램 시작 ==");
+		
+		makeTestData();
+		
+		
 //		데이터타입을 받을 함수 Scanner
 		Scanner sc = new Scanner(System.in);
+			
 		
-		List<Article> articles = new ArrayList<>();
-		int lastArticleId = 1;
 		
 		while(true) {
 			
@@ -42,10 +50,10 @@ public class Main {
 				} 
 				
 				if (articles.size() != 0) {
-					System.out.println("번호  |  제목");
+					System.out.println("번호  |  제목  |  날짜  |  조회수");
 					for (int i = 0; i < articles.size(); i++) {
 						Article article = articles.get(i);
-						System.out.printf("%d  |  %s\n", article.id, article.title, article.text);
+						System.out.printf("%d  |  %s\n", article.id, article.title, article.text, article.regDate, article.viewCnt);
 					}
 				}
 				
@@ -53,9 +61,12 @@ public class Main {
 				System.out.printf("제목 : ");
 				String title = sc.nextLine().trim();
 				System.out.printf("내용 : ");
-				String text = sc.nextLine().trim();				
+				String text = sc.nextLine().trim();		
 				
-				articles.add(new Article(lastArticleId, title, text));
+				
+				int viewCnt = 0;
+				
+				articles.add(new Article(lastArticleId, Util.getDateStr(), title, text, viewCnt));
 				
 				System.out.println(lastArticleId + "번 게시물이 생성되었습니다.");
 				lastArticleId++;
@@ -70,6 +81,9 @@ public class Main {
 								
 				Article foundArticle = null;
 				
+				
+				
+				
 				for (Article article : articles) {
 					if (article.id == id) {
 						foundArticle = article;
@@ -81,10 +95,16 @@ public class Main {
 						continue;
 					}
 					
+					foundArticle.incrementViews();
+					
 					System.out.println("번호 : " + foundArticle.id);
-					System.out.println("날짜 : ~~~");
+					System.out.println("날짜 : " + foundArticle.regDate);
 					System.out.println("제목 : " + foundArticle.title);
 					System.out.println("내용 : " + foundArticle.text);
+					System.out.println("조회수 : " + foundArticle.viewCnt);
+					
+					
+			    
 					
 			} else if (cmd.startsWith("article delete ")) {
 			String[] cmdBits = cmd.split(" ");
@@ -184,20 +204,50 @@ public class Main {
 			sc.close();
 			System.out.println("== 프로그램 끝 ==");
 		}
+	
+	private static void makeTestData() {
+		System.out.println("테스트용 게시글 데이터를 5개 생성했습니다");
+		
+		for (int i = 1; i <= 5; i++) {
+			articles.add(new Article(lastArticleId++, Util.getDateStr(), "제목" + i, "내용" + i, i * 10));
+		}
 	}
+}
 
 class Article {
 	int id;
+	String regDate;
 	String title;
 	String text;
+	int viewCnt;
+	
 	
 
 //	생성자를 만들어줘서 Main 클래스 안 지역변수에 코드를 최적화 시킬 수 있다.
-	Article(int id, String title, String text) {
+	Article(int id, String regDate, String title, String text, int viewCnt) {
 		this.id = id;
+		this.regDate = regDate;
 		this.title = title;
 		this.text = text;
+		this.viewCnt = viewCnt;
+		
 				
+	}
+	
+	void incrementViews() {
+		this.viewCnt++;
+	}
+}
+
+class Post {
+	LocalDateTime util;
+	String title;
+	String text;
+	
+	Post(LocalDateTime util, String title, String text) {
+		this.util = util;
+		this.title = title;
+		this.text = text;
 	}
 	
 }
