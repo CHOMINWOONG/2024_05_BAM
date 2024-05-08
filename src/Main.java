@@ -133,11 +133,20 @@ public class Main {
 				articles.remove(foundArticle);	
 //				articles.remove(foundIndex);
 				
-				System.out.println("게시물이 삭제되었습니다.");
+				System.out.println(id + "번 게시물이 삭제되었습니다.");
 																
 			} else if (cmd.startsWith("article modify ")) {
+				
 				String[] cmdBits = cmd.split(" ");
 				int id = 0;
+				
+				try {
+					id = Integer.parseInt(cmdBits[2]);
+				} catch (NumberFormatException e) {
+					System.out.println("올바른 명령어가 아닙니다.");
+					continue;
+				}
+				
 				Article foundArticle = null;
 				
 				for (Article article : articles) {
