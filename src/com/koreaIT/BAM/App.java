@@ -53,25 +53,39 @@ public class App {
 				continue;
 			}
 			
-			if (cmd.equals("article list")) {
-				
+			if (cmd.startsWith("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("존재하는 게시글이 없습니다.");
 					
 					continue;
-				} 
+				} 				
+//				substring 인덱스 인자값을 받아서 그 후부터 나오게 하는 함수
+				String searchKeyword = cmd.substring("article list ".length()).trim();
 				
-				if (articles.size() != 0) {
-					System.out.println("번호    |	제목	|	      날짜	        |   조회수");
+				List<Article> printArticles = articles;
+				
+				if (searchKeyword.length() > 0) {
+					System.out.println("검색어 : " + searchKeyword);
+					for (Article article : articles) {
+						if (article.getTitle().contains(searchKeyword)) {
+							printArticles.add(article);
+						}					
+				}
 					
-					
-					for (int i = articles.size() - 1; i >= 0; i--) {
-						Article article = articles.get(i);
-						System.out.printf("%d	|	%s	|	%s	|	%d\n", article.getId(), article.getTitle(), article.getRegDate(), article.getViewCnt());
-					}
+				if (printArticles.size() == 0) {
+						System.out.println("검색결과가 존재하지않습니다.");
+					}								
 				}
 				
-			} else if (cmd.equals("article write")) {
+				if (articles.size() != 0) {
+					System.out.println("번호    |	제목	|	      날짜	        |   조회수");					
+					for (int i = printArticles.size() - 1; i >= 0; i--) {
+						Article article = printArticles.get(i);
+						System.out.printf("%d	|	%s	|	%s	|	%d\n", article.getId(), article.getTitle(), article.getRegDate(), article.getViewCnt());
+					}				
+				}				
+			}
+			else if (cmd.equals("article write")) {
 				System.out.printf("제목 : ");
 				String title = sc.nextLine().trim();
 				System.out.printf("내용 : ");
