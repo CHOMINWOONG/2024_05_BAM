@@ -51,9 +51,11 @@ public class Main {
 				
 				if (articles.size() != 0) {
 					System.out.println("번호  |  제목  |  날짜  |  조회수");
-					for (int i = 0; i < articles.size(); i++) {
+					
+					
+					for (int i = articles.size() - 1; i >= 0; i--) {
 						Article article = articles.get(i);
-						System.out.printf("%d  |  %s\n", article.id, article.title, article.text, article.regDate, article.viewCnt);
+						System.out.printf("%d	|	%s	|	%s	|	%d\n", article.id, article.title, article.regDate, article.viewCnt);
 					}
 				}
 				
