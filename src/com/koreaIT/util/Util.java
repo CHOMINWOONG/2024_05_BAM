@@ -1,3 +1,4 @@
+package com.koreaIT.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -11,3 +12,5 @@ public class Util {
         return now.format(formatter);
 	}
 }
+
+
