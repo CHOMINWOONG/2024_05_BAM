@@ -1,23 +1,37 @@
 package com.koreaIT.BAM;
+<<<<<<< HEAD
+=======
+
+>>>>>>> a46f3ab77df4ad85309777e9b809ecf89251f1c9
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.dto.Article;
+<<<<<<< HEAD
 import com.koreaIT.dto.Member;
+=======
+>>>>>>> a46f3ab77df4ad85309777e9b809ecf89251f1c9
 import com.koreaIT.util.Util;
 
 public class App {
 	
 	private List<Article> articles = new ArrayList<>();
+<<<<<<< HEAD
 	private List<Member> members = new ArrayList<>();
 	private int lastArticleId = 1;
 	private int memberArticleId = 1;
+=======
+	private int lastArticleId = 1;
+>>>>>>> a46f3ab77df4ad85309777e9b809ecf89251f1c9
 	
 	
 	public App() {		
 		articles = new ArrayList<>();
+<<<<<<< HEAD
 		
+=======
+>>>>>>> a46f3ab77df4ad85309777e9b809ecf89251f1c9
 		lastArticleId = 1;
 	}
 
@@ -56,6 +70,7 @@ public class App {
 				continue;
 			}
 			
+<<<<<<< HEAD
 			if (cmd.equals("member join")) {
 				
 				System.out.printf("아이디: ");
@@ -94,6 +109,12 @@ public class App {
 			} if (cmd.startsWith("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("존재하는 게시글이 없습니다.");		
+=======
+			if (cmd.startsWith("article list")) {
+				if (articles.size() == 0) {
+					System.out.println("존재하는 게시글이 없습니다.");
+					
+>>>>>>> a46f3ab77df4ad85309777e9b809ecf89251f1c9
 					continue;
 				} 				
 //				substring 인덱스 인자값을 받아서 그 후부터 나오게 하는 함수
@@ -101,7 +122,10 @@ public class App {
 				
 				List<Article> printArticles = articles;
 				
+<<<<<<< HEAD
 				
+=======
+>>>>>>> a46f3ab77df4ad85309777e9b809ecf89251f1c9
 				if (searchKeyword.length() > 0) {
 					System.out.println("검색어 : " + searchKeyword);
 					
@@ -119,6 +143,7 @@ public class App {
 					}								
 				}
 				
+<<<<<<< HEAD
 				System.out.println("번호    |	제목	|	      날짜	        |   조회수");
 														
 					for (int i = printArticles.size() - 1; i >= 0; i--) {
@@ -127,6 +152,53 @@ public class App {
 					}												
 			}
 			 else if (cmd.startsWith("article detail ")) {
+=======
+				if (articles.size() != 0) {
+					System.out.println("번호    |	제목	|	      날짜	        |   조회수");					
+					for (int i = printArticles.size() - 1; i >= 0; i--) {
+						Article article = printArticles.get(i);
+						System.out.printf("%d	|	%s	|	%s	|	%d\n", article.getId(), article.getTitle(), article.getRegDate(), article.getViewCnt());
+					}				
+				}				
+			}
+			else if (cmd.equals("article write")) {
+				System.out.printf("제목 : ");
+				String title = sc.nextLine().trim();
+				System.out.printf("내용 : ");
+				String text = sc.nextLine().trim();		
+				
+				
+				int viewCnt = 0;
+				
+				articles.add(new Article(lastArticleId, Util.getDateStr(), title, text, viewCnt));
+				
+				System.out.println(lastArticleId + "번 게시물이 생성되었습니다.");
+				lastArticleId++;
+				continue;
+				
+			} else if (cmd.startsWith("article detail ")) {
+																
+				int id = getNum(cmd);
+				Article foundArticle = 	getArticleById(id);
+				
+					if (foundArticle == null) {
+						System.out.println(id + "번 게시물이 존재하지 않습니다.");
+						continue;
+					}
+					
+					foundArticle.incrementViews();
+					
+					System.out.println("번호 : " + foundArticle.getId());
+					System.out.println("날짜 : " + foundArticle.getRegDate());
+					System.out.println("제목 : " + foundArticle.getTitle());
+					System.out.println("내용 : " + foundArticle.getText());
+					System.out.println("조회수 : " + foundArticle.getViewCnt());
+					
+					
+			    
+					
+			} else if (cmd.startsWith("article detail ")) {
+>>>>>>> a46f3ab77df4ad85309777e9b809ecf89251f1c9
 				int id = getNum(cmd);
 
 				if (id == 0) {
