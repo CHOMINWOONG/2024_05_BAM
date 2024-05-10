@@ -4,16 +4,20 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.koreaIT.dto.Article;
+import com.koreaIT.dto.Member;
 import com.koreaIT.util.Util;
 
 public class App {
 	
 	private List<Article> articles = new ArrayList<>();
+	private List<Member> members = new ArrayList<>();
 	private int lastArticleId = 1;
+	private int memberArticleId = 1;
 	
 	
 	public App() {		
 		articles = new ArrayList<>();
+		
 		lastArticleId = 1;
 	}
 
@@ -52,7 +56,42 @@ public class App {
 				continue;
 			}
 			
-			if (cmd.startsWith("article list")) {
+			if (cmd.equals("member join")) {
+				
+				System.out.printf("아이디: ");
+				String loginId = sc.nextLine().trim();
+				System.out.printf("비밀번호 ");
+				String loginPw = sc.nextLine().trim();
+				System.out.printf("비밀번호 확인 ");
+				String loginPwChk = sc.nextLine().trim();
+				System.out.printf("이름 ");
+				String name = sc.nextLine().trim();
+				
+				Member member = new Member(memberArticleId, Util.getDateStr(), loginId, loginPw, name);
+				members.add(member);
+				
+				System.out.println(memberArticleId + "번 회원이 가입되었습니다.");
+				memberArticleId++;
+				continue;
+				
+				
+			} else if (cmd.equals("article write")) {
+				System.out.printf("제목 : ");
+				String title = sc.nextLine().trim();
+				System.out.printf("내용 : ");
+				String text = sc.nextLine().trim();		
+				
+				
+				int viewCnt = 0;
+				
+				
+				Article article = new Article(lastArticleId, Util.getDateStr(), title, text, viewCnt);
+				articles.add(article);
+				System.out.println(lastArticleId + "번 게시물이 생성되었습니다.");
+				lastArticleId++;
+				continue;
+				
+			} if (cmd.startsWith("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("존재하는 게시글이 없습니다.");		
 					continue;
@@ -87,43 +126,7 @@ public class App {
 						System.out.printf("%d	|	%s	|	%s	|	%d\n", article.getId(), article.getTitle(), article.getRegDate(), article.getViewCnt());
 					}												
 			}
-			else if (cmd.equals("article write")) {
-				System.out.printf("제목 : ");
-				String title = sc.nextLine().trim();
-				System.out.printf("내용 : ");
-				String text = sc.nextLine().trim();		
-				
-				
-				int viewCnt = 0;
-				
-				articles.add(new Article(lastArticleId, Util.getDateStr(), title, text, viewCnt));
-				
-				System.out.println(lastArticleId + "번 게시물이 생성되었습니다.");
-				lastArticleId++;
-				continue;
-				
-			} else if (cmd.startsWith("article detail ")) {
-																
-				int id = getNum(cmd);
-				Article foundArticle = 	getArticleById(id);
-				
-					if (foundArticle == null) {
-						System.out.println(id + "번 게시물이 존재하지 않습니다.");
-						continue;
-					}
-					
-					foundArticle.incrementViews();
-					
-					System.out.println("번호 : " + foundArticle.getId());
-					System.out.println("날짜 : " + foundArticle.getRegDate());
-					System.out.println("제목 : " + foundArticle.getTitle());
-					System.out.println("내용 : " + foundArticle.getText());
-					System.out.println("조회수 : " + foundArticle.getViewCnt());
-					
-					
-			    
-					
-			} else if (cmd.startsWith("article detail ")) {
+			 else if (cmd.startsWith("article detail ")) {
 				int id = getNum(cmd);
 
 				if (id == 0) {
