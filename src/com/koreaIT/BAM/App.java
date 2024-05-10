@@ -15,10 +15,11 @@ public class App {
 	private int memberArticleId = 1;
 	
 	
-	public App() {		
-		articles = new ArrayList<>();
-		
-		lastArticleId = 1;
+	public App() {
+		this.articles = new ArrayList<>();
+		this.members = new ArrayList<>();
+		this.lastArticleId = 1;
+		this.memberArticleId = 1;
 	}
 
 
@@ -29,6 +30,7 @@ public class App {
 		System.out.println("== 프로그램 시작 ==");
 		
 		makeTestData();
+		makeTestMemberData();
 		
 		
 //		데이터타입을 받을 함수 Scanner
@@ -58,14 +60,70 @@ public class App {
 			
 			if (cmd.equals("member join")) {
 				
-				System.out.printf("아이디: ");
-				String loginId = sc.nextLine().trim();
-				System.out.printf("비밀번호 ");
-				String loginPw = sc.nextLine().trim();
-				System.out.printf("비밀번호 확인 ");
-				String loginPwChk = sc.nextLine().trim();
+				String loginId = null;
+				String loginPw = null;
+				String loginPwChk = null;
+				String name = null;
+				boolean a = false;
+				
+				while(true) {
+					
+					System.out.printf("아이디: ");
+					loginId = sc.nextLine().trim();
+					
+					if (loginId.length() == 0) {
+						System.out.println("아이디는 필수 입력정보입니다.");
+						continue;
+					}
+					if (loginIdDupChk(loginId) == false) {
+						System.out.println("중복된 아이디입니다.");
+						continue;
+					}
+					
+					for (Member member : members) {
+						if (member.getLoginId().equals(loginId)) {
+							System.out.println("[" + loginId + "]는(은) 이미 사용 중인 아이디입니다.");
+							a = true;
+							break;							
+						}
+					}
+					if (a == true) {
+					continue;
+					}
+					break;
+				}
+								
+				while (true) {
+					System.out.printf("비밀번호 : ");
+					loginPw = sc.nextLine().trim();
+					
+					if (loginPw.length() == 0) {
+						System.out.println("비밀번호는 필수 입력정보입니다");
+						continue;
+					}
+					
+					System.out.printf("비밀번호 확인 : ");
+					loginPwChk = sc.nextLine().trim();
+					
+					if (loginPw.equals(loginPwChk) == false) {
+						System.out.println("비밀번호를 다시 입력해주세요");
+						continue;
+					}
+					break;
+				}
+				
+				
+				while(true) {
+				
 				System.out.printf("이름 ");
-				String name = sc.nextLine().trim();
+				name = sc.nextLine().trim();
+				if (name.length() == 0) {
+					System.out.println("이름은 필수 입력정보입니다.");
+					continue;
+				}
+				break;
+				
+				}
 				
 				Member member = new Member(memberArticleId, Util.getDateStr(), loginId, loginPw, name);
 				members.add(member);
@@ -205,6 +263,16 @@ public class App {
 			sc.close();
 			System.out.println("== 프로그램 끝 ==");
 	}
+	
+	private boolean loginIdDupChk(String loginId) {
+		for (Member member : members) {
+			if (member.getLoginId().equals(loginId)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	private Article getArticleById(int id) {
 
 		for (Article article : articles) {
@@ -233,5 +301,12 @@ public class App {
 			articles.add(new Article(lastArticleId++, Util.getDateStr(), "제목" + i, "내용" + i, i * 10));
 			}
 		}
+	private void makeTestMemberData() {
+		System.out.println("테스트용 회원 데이터를 3개 생성했습니다");
+
+		for (int i = 1; i <= 3; i++) {
+			members.add(new Member(memberArticleId++, Util.getDateStr(), "user" + i, "user" + i, "유저" + i));
+		}
+	}
 }
 
