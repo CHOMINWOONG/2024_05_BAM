@@ -1,4 +1,4 @@
-package ArticleController;
+package com.koreaIT.BAM.Controller;
 
 import java.util.ArrayList;
 
@@ -9,19 +9,43 @@ import java.util.Scanner;
 import com.koreaIT.dto.Article;
 import com.koreaIT.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 	
-	private Scanner sc;
 	private List<Article> articles;
-	private int lastArticleId;
 	
 	public ArticleController(Scanner sc) {
 		
-		this.sc = sc;
+		this.sc = sc; 
 		this.articles = new ArrayList<>();
-		this.lastArticleId = 1;
+		this.lastId = 1;
 		
 	}
+	
+	@Override
+	public void doAction(String cmd, String methodName) {
+		this.cmd = cmd; 
+		
+		switch(methodName) {
+		case "write":
+			doWrite();
+			break;
+		case "list":
+			doList();
+			break;
+		case "detail":
+			doDetail();
+			break;
+		case "modify":
+			doModify();
+			break;
+		case "delete":
+			doDelete();
+			break;		
+		default :
+		System.out.println("존재하지 않는 명령어입니다");
+		break;
+	}	
+}
 	
 	public void doWrite() {
 		System.out.printf("제목 : ");
@@ -29,13 +53,13 @@ public class ArticleController {
 		System.out.printf("내용 : ");
 		String body = sc.nextLine().trim();
 
-		Article article = new Article(lastArticleId, Util.getDateStr(), title, body, 0);
+		Article article = new Article(lastId, Util.getDateStr(), title, body, 0);
 		articles.add(article);
 
-		System.out.println(lastArticleId + "번 글이 생성되었습니다");
-		lastArticleId++;		
+		System.out.println(lastId + "번 글이 생성되었습니다");
+		lastId++;		
 	}	
-	public void doList(String cmd) {
+	public void doList() {
 		if (articles.size() == 0) {
 			System.out.println("존재하는 게시글이 없습니다");
 			return;
@@ -70,7 +94,7 @@ public class ArticleController {
 					article.getRegDate(), article.getViewCnt());
 		}
 	}
-	public void doDetail(String cmd) {
+	public void doDetail() {
 		int id = getCmdNum(cmd);
 
 		if (id == 0) {
@@ -94,7 +118,7 @@ public class ArticleController {
 		System.out.println("조회수 : " + foundArticle.getViewCnt());
 
 	}
-	public void doDelete(String cmd) {
+	public void doDelete() {
 		int id = getCmdNum(cmd);
 
 		if (id == 0) {
@@ -113,7 +137,7 @@ public class ArticleController {
 
 		System.out.println(id + "번 게시물이 삭제되었습니다");
 	}
-	public void doModify(String cmd) {
+	public void doModify() {
 		int id = getCmdNum(cmd);
 
 		if (id == 0) {
@@ -151,6 +175,8 @@ public class ArticleController {
 	
 	private int getCmdNum(String cmd) {
 		String[] cmdBits = cmd.split(" ");
+		
+		
 
 		try {
 			int id = Integer.parseInt(cmdBits[2]);
@@ -159,11 +185,13 @@ public class ArticleController {
 			return 0;
 		}
 	}
-	public void makeTestArticleDate() {
+	
+	@Override
+	public void makeTestDate() {
 		System.out.println("테스트용 게시글 데이터를 5개 생성했습니다");
 
 		for (int i = 1; i <= 5; i++) {
-			articles.add(new Article(lastArticleId++, Util.getDateStr(), "제목" + i, "내용" + i, i * 10));
+			articles.add(new Article(lastId++, Util.getDateStr(), "제목" + i, "내용" + i, i * 10));
 			
 		}
 	}
