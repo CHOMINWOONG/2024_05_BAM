@@ -29,6 +29,9 @@ public class MemberController extends Controller {
 		case "join":
 			doJoin();
 			break;
+		case "login":
+			doLogin();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어 입니다");
 		}
@@ -107,16 +110,55 @@ public class MemberController extends Controller {
 		lastId++;
 		
 	}
-	
-	private boolean loginIdDupChk(String loginId) {
-		for (Member member : members) {
-			if (member.getLoginId().equals(loginId)) {
-				return false;
+	public void doLogin() {
+		String loginId = null;
+		String loginPw = null;
+		
+
+			System.out.printf("아이디 : ");
+			loginId = sc.nextLine().trim();
+			System.out.printf("비밀번호 : ");
+			loginPw = sc.nextLine().trim();
+			
+			Member foundMember = getMemberByLoginId(loginId);
+			
+			for (Member member : members) {
+				if(member.getLoginId().equals(loginId)) {
+					foundMember = member;
+					break;
+				}	
 			}
-		}
+			if (foundMember == null) {
+				System.out.println("존재하지 않는 아이디입니다");
+				return;
+			}
+			
+			if(foundMember.getLoginPw().equals(loginPw) == false) {
+				System.out.println("비밀번호를 확인해주세요");
+				return;
+			}
+			
+			this.getMemberByLoginId(loginId);
+				
+		System.out.println("로그인 성공 !");
+				
+	}
+	
+	private boolean loginIdDupChk(String loginId) {		
+		Member member = getMemberByLoginId(loginId);		 
+			if (member != null) {
+				return false;
+			}		
 		return true;
 	}
 	
+	private Member getMemberByLoginId(String loginId) {
+		for (Member member : members) {
+			member.getLoginId().equals(loginId);
+		}
+		return null;
+	}
+
 	@Override
 	public void makeTestDate() {
 		System.out.println("테스트용 회원 데이터를 3개 생성했습니다");
