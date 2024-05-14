@@ -12,7 +12,7 @@ import com.koreaIT.util.Util;
 
 public class MemberController extends Controller {
 	
-	private List<Member> members;
+	
 		
 	public MemberController(Scanner sc) {
 		
@@ -72,8 +72,7 @@ public class MemberController extends Controller {
 					break;							
 				}
 			
-			}
-			
+			}			
 			
 			break;
 		}
@@ -122,9 +121,7 @@ public class MemberController extends Controller {
 			if(isLogined()) {
 				System.out.println("로그인 상태입니다");
 				return;
-			}
-			
-			
+			}						
 			
 					
 			System.out.printf("아이디 : ");
@@ -158,13 +155,7 @@ public class MemberController extends Controller {
 		loginedMember = null;
 		System.out.println("로그아웃 !");
 	}
-	private boolean isLogined() {		
-				 
-			if (loginedMember != null) {
-				return true;
-			}		
-			return false;
-	}
+
 	
 	private boolean loginIdDupChk(String loginId) {		
 		Member member = getMemberByLoginId(loginId);		 
@@ -176,7 +167,9 @@ public class MemberController extends Controller {
 	
 	private Member getMemberByLoginId(String loginId) {
 		for (Member member : members) {
-			member.getLoginId().equals(loginId);
+			if(member.getLoginId().equals(loginId)) {
+				return member;
+			}
 		}
 		return null;
 	}

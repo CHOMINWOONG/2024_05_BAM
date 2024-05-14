@@ -47,6 +47,25 @@ public class App {
 			String controllerName = cmdBitz[0];
 			String methodName = cmdBitz[1];
 			
+			switch(methodName) {
+			case "write":
+			case "modify":
+			case "delete":
+			case "logout":
+				if () {
+					System.out.println("로그인을 해주세요");
+					continue;
+				}
+				break;
+			case "join":
+			case "login":
+				if () {
+					System.out.println("로그아웃을 해주세요");
+					continue;
+				}
+				break;
+			}
+			
 			if(controllerName.equals("article")) {
 				articleController.doAction(cmd, methodName);
 			} else if(controllerName.equals("member")) {
