@@ -6,19 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.dto.Article;
 import com.koreaIT.dto.Member;
 import com.koreaIT.util.Util;
 
 public class MemberController extends Controller {
 	
-	private List<Member> members = new ArrayList<>();
-	
-	
+	private List<Member> members;
+		
 	public MemberController(Scanner sc) {
 		
 		this.sc = sc;
 		this.members = new ArrayList<>();
 		this.lastId = 1;
+		loginedMember = null;
 	}
 	
 	@Override
@@ -32,17 +33,24 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
+		case "logout":
+			doLogout();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어 입니다");
 		}
 	}
 	
-	public void doJoin() {
+	public void doJoin() {		
+		if (isLogined()) {
+			System.out.println("로그인 상태입니다");
+			return;
+		}
+		
 		String loginId = null;
 		String loginPw = null;
 		String loginPwChk = null;
 		String name = null;
-		boolean a = false;
 		
 		while(true) {
 			
@@ -61,13 +69,12 @@ public class MemberController extends Controller {
 			for (Member member : members) {
 				if (member.getLoginId().equals(loginId)) {
 					System.out.println("[" + loginId + "]는(은) 이미 사용 중인 아이디입니다.");
-					a = true;
 					break;							
 				}
+			
 			}
-			if (a == true) {
-			continue;
-			}
+			
+			
 			break;
 		}
 						
@@ -111,23 +118,22 @@ public class MemberController extends Controller {
 		
 	}
 	public void doLogin() {
-		String loginId = null;
-		String loginPw = null;
-		
-
+			
+			if(isLogined()) {
+				System.out.println("로그인 상태입니다");
+				return;
+			}
+			
+			
+			
+					
 			System.out.printf("아이디 : ");
-			loginId = sc.nextLine().trim();
+			String loginId = sc.nextLine().trim();
 			System.out.printf("비밀번호 : ");
-			loginPw = sc.nextLine().trim();
+			String loginPw = sc.nextLine().trim();
 			
 			Member foundMember = getMemberByLoginId(loginId);
 			
-			for (Member member : members) {
-				if(member.getLoginId().equals(loginId)) {
-					foundMember = member;
-					break;
-				}	
-			}
 			if (foundMember == null) {
 				System.out.println("존재하지 않는 아이디입니다");
 				return;
@@ -138,10 +144,26 @@ public class MemberController extends Controller {
 				return;
 			}
 			
-			this.getMemberByLoginId(loginId);
+			
+			loginedMember = foundMember;
 				
 		System.out.println("로그인 성공 !");
 				
+	}
+	public void doLogout() {
+		if(isLogined() == false) {
+			System.out.println("로그아웃 상태입니다");
+			return;
+		}
+		loginedMember = null;
+		System.out.println("로그아웃 !");
+	}
+	private boolean isLogined() {		
+				 
+			if (loginedMember != null) {
+				return true;
+			}		
+			return false;
 	}
 	
 	private boolean loginIdDupChk(String loginId) {		
@@ -158,6 +180,8 @@ public class MemberController extends Controller {
 		}
 		return null;
 	}
+	
+	
 
 	@Override
 	public void makeTestDate() {

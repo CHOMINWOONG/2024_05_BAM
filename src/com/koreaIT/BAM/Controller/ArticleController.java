@@ -48,12 +48,16 @@ public class ArticleController extends Controller {
 }
 	
 	public void doWrite() {
+		if (isLogined() == false) {
+			System.out.println("로그인을 진행해주세요");
+			return;
+		}
 		System.out.printf("제목 : ");
 		String title = sc.nextLine().trim();
 		System.out.printf("내용 : ");
 		String body = sc.nextLine().trim();
 
-		Article article = new Article(lastId, Util.getDateStr(), title, body, 0);
+		Article article = new Article(lastId, Util.getDateStr(), loginedMember.getId(), title, body, 0);
 		articles.add(article);
 
 		System.out.println(lastId + "번 글이 생성되었습니다");
@@ -86,12 +90,12 @@ public class ArticleController extends Controller {
 			}
 		}
 		
-		System.out.println("번호	|	제목	|		날짜		|	조회수");
+		System.out.println("번호	|	제목	|		날짜		|    작성자 |  조회수");
 
 		for (int i = printArticles.size() - 1; i >= 0; i--) {
 			Article article = printArticles.get(i);
-			System.out.printf("%d	|	%s	|	%s	|	%d\n", article.getId(), article.getTitle(),
-					article.getRegDate(), article.getViewCnt());
+			System.out.printf("%d	|	%s	|	%s	|	%d   |   %d\n", article.getId(), article.getTitle(),
+					article.getRegDate(), article.getMemberId(), article.getViewCnt());
 		}
 	}
 	public void doDetail() {
@@ -115,10 +119,16 @@ public class ArticleController extends Controller {
 		System.out.println("날짜 : " + foundArticle.getRegDate());
 		System.out.println("제목 : " + foundArticle.getTitle());
 		System.out.println("내용 : " + foundArticle.getText());
+		System.out.println("작성자 : " + foundArticle.getMemberId());
 		System.out.println("조회수 : " + foundArticle.getViewCnt());
 
 	}
 	public void doDelete() {
+		if (isLogined() == false) {
+			System.out.println("로그인을 해주세요");
+			return;
+		}
+		
 		int id = getCmdNum(cmd);
 
 		if (id == 0) {
@@ -138,6 +148,11 @@ public class ArticleController extends Controller {
 		System.out.println(id + "번 게시물이 삭제되었습니다");
 	}
 	public void doModify() {
+		if (isLogined() == false) {
+			System.out.println("로그인을 해주세요");
+			return;
+		}
+		
 		int id = getCmdNum(cmd);
 
 		if (id == 0) {
@@ -162,6 +177,13 @@ public class ArticleController extends Controller {
 
 		System.out.println(id + "번 게시물이 수정되었습니다");
 	}
+	private boolean isLogined() {		
+		 
+		if (loginedMember != null) {
+			return true;
+		}		
+		return false;
+}
 	
 	private Article getArticleById(int id) {
 		for (Article article : articles) {
@@ -183,7 +205,10 @@ public class ArticleController extends Controller {
 			return id;
 		} catch (NumberFormatException e) {
 			return 0;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return 0;
 		}
+
 	}
 	
 	@Override
@@ -191,7 +216,7 @@ public class ArticleController extends Controller {
 		System.out.println("테스트용 게시글 데이터를 5개 생성했습니다");
 
 		for (int i = 1; i <= 5; i++) {
-			articles.add(new Article(lastId++, Util.getDateStr(), "제목" + i, "내용" + i, i * 10));
+			articles.add(new Article(lastId++, Util.getDateStr(), 2, "제목" + i, "내용" + i, i * 10));
 			
 		}
 	}
