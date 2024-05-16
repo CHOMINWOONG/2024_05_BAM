@@ -47,19 +47,19 @@ public class App {
 			String controllerName = cmdBitz[0];
 			String methodName = cmdBitz[1];
 			
-			switch(methodName) {
-			case "write":
-			case "modify":
-			case "delete":
-			case "logout":
-				if () {
+			switch(controllerName + " / " + methodName) {
+			case "article/write":
+			case "article/modify":
+			case "article/delete":
+			case "member/logout":
+				if (Controller.isLogined() == false) {
 					System.out.println("로그인을 해주세요");
 					continue;
 				}
 				break;
-			case "join":
-			case "login":
-				if () {
+			case "member/join":
+			case "member/login":
+				if (Controller.isLogined()) {
 					System.out.println("로그아웃을 해주세요");
 					continue;
 				}

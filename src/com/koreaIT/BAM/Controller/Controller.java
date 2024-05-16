@@ -16,6 +16,7 @@ public abstract class Controller {
 	public abstract void doAction(String cmd, String methodName);
 	public abstract void makeTestDate();
 	
+	
 	public static boolean isLogined() {		
 			return loginedMember != null;
 }
