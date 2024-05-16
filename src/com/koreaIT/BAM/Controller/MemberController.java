@@ -116,7 +116,7 @@ public class MemberController extends Controller {
 			System.out.printf("비밀번호 : ");
 			String loginPw = sc.nextLine().trim();
 			
-			Member foundMember = getMemberByLoginId(loginId);
+			Member foundMember = memberServices.getMemberByLoginId(loginId);
 			
 			if (foundMember == null) {
 				System.out.println("존재하지 않는 아이디입니다");
@@ -133,9 +133,6 @@ public class MemberController extends Controller {
 				
 		System.out.println("로그인 성공 !");
 				
-	}
-	private Member getMemberByLoginId(String loginId) {
-		return memberServices.getMemberByLoginId(loginId);
 	}
 
 	public void doLogout() {

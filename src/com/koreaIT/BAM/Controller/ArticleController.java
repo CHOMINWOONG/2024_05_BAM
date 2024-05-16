@@ -62,31 +62,15 @@ public class ArticleController extends Controller {
 		System.out.println(articleNumber + "번 글이 생성되었습니다");
 	}	
 	public void doList() {
-		if (articles.size() == 0) {
-			System.out.println("존재하는 게시글이 없습니다");
-			return;
-		}
-
 		String searchKeyword = cmd.substring("article list".length()).trim();
 		
-		List<Article> printArticles = articles;
-		
-		if (searchKeyword.length() > 0) {
-			System.out.println("검색어 : " + searchKeyword);
-			
-			printArticles = new ArrayList<>();
-			
-			for (Article article : articles) {
-				if (article.getTitle().contains(searchKeyword)) {
-					printArticles.add(article);
-				}
-			}
+		List<Article> printArticles = articleService.getPrintArticles(searchKeyword);
 			
 			if (printArticles.size() == 0) {
 				System.out.println("검색결과가 없습니다");
 				return;
 			}
-		}
+		
 		
 		System.out.println("번호	|	제목	|		날짜		|    작성자 |  조회수");
 
@@ -95,15 +79,12 @@ public class ArticleController extends Controller {
 			
 			String writerLoginId = getLoginIdByMemberId(article.getMemberId());
 			
-		for (Member member : members) {
-			if (article.getMemberId() == member.getId());
-			writerLoginId = member.getLoginId();
-			break;
-		}
+		
 			System.out.printf("%d	|	%s	|	%s	|	%d   |   %d\n", article.getId(), article.getTitle(),
 					article.getRegDate(), writerLoginId, article.getViewCnt());
 		}
 	}
+
 	public void doDetail() {
 		int id = getCmdNum(cmd);
 		
@@ -113,7 +94,7 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시물이 존재하지 않습니다");
@@ -141,7 +122,7 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시물이 존재하지 않습니다");
@@ -165,7 +146,7 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 		
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시물이 존재하지 않습니다");
@@ -196,16 +177,6 @@ public class ArticleController extends Controller {
 				return member.getLoginId();
 			}
 		}
-		return null;
-	}
-	
-	private Article getArticleById(int id) {
-		for (Article article : articles) {
-			if (article.getId() == id) {
-				return article;
-			}
-		}
-
 		return null;
 	}
 	
