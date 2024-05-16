@@ -1,24 +1,26 @@
 package com.koreaIT.BAM.Controller;
 
 import java.util.ArrayList;
-
-
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.BAM.container.container;
+import com.koreaIT.BAM.service.ArticleService;
 import com.koreaIT.dto.Article;
 import com.koreaIT.dto.Member;
-import com.koreaIT.util.Util;
+
 
 public class ArticleController extends Controller {
 	
 	private List<Article> articles;
+	private ArticleService articleService;
 	
 	public ArticleController(Scanner sc) {
 		
 		this.sc = sc; 
-		this.articles = new ArrayList<>();
-		this.lastId = 1;
+		this.articles = container.articles;
+		this.articleService = new ArticleService();
+		
 		
 	}
 	
@@ -55,11 +57,9 @@ public class ArticleController extends Controller {
 		System.out.printf("내용 : ");
 		String body = sc.nextLine().trim();
 
-		Article article = new Article(lastId, Util.getDateStr(), loginedMember.getId(), title, body, 0);
-		articles.add(article);
-
-		System.out.println(lastId + "번 글이 생성되었습니다");
-		lastId++;		
+		int articleNumber = articleService.writeArticle(1, title, body, 0);
+		
+		System.out.println(articleNumber + "번 글이 생성되었습니다");
 	}	
 	public void doList() {
 		if (articles.size() == 0) {
@@ -120,7 +120,8 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		foundArticle.getViewCnt();
+		
+		foundArticle.incrementViews();
 		String writerLoginId = getLoginIdByMemberId(foundArticle.getMemberId());
 		
 		System.out.println("번호 : " + foundArticle.getId());
@@ -166,14 +167,17 @@ public class ArticleController extends Controller {
 
 		Article foundArticle = getArticleById(id);
 		
-		if (foundArticle.getMemberId() != loginedMember.getId()) {
-			System.out.println("수정할 수 있는 권한이 없습니다");
-		}
-
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시물이 존재하지 않습니다");
 			return;
 		}
+		
+		if (foundArticle.getMemberId() != loginedMember.getId()) {
+			System.out.println("수정할 수 있는 권한이 없습니다");
+			return;
+		}
+
+		
 
 		System.out.printf("수정할 제목 : ");
 		String title = sc.nextLine().trim();
@@ -226,7 +230,7 @@ public class ArticleController extends Controller {
 		System.out.println("테스트용 게시글 데이터를 5개 생성했습니다");
 
 		for (int i = 1; i <= 5; i++) {
-			articles.add(new Article(lastId++, Util.getDateStr(), (int) (Math.random() * 3) + 1, "제목" + i, "내용" + i, i * 10));
+			articleService.writeArticle((int) (Math.random() * 3) + 1, "제목" + i, "내용" + i, i * 10);
 			
 		}
 	}

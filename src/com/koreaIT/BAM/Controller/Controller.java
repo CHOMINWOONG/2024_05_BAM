@@ -8,7 +8,7 @@ import com.koreaIT.dto.Member;
 public abstract class Controller {
 	
 	public Scanner sc;
-	public int lastId;
+//	public int lastId;
 	public String cmd;
 	public static Member loginedMember;
 	public List<Member> members = new ArrayList<>();
@@ -19,5 +19,5 @@ public abstract class Controller {
 	
 	public static boolean isLogined() {		
 			return loginedMember != null;
-}
+	}
 }
